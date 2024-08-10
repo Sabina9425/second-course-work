@@ -13,40 +13,44 @@ class Vacancy:
             return 'Зарплата не указана'
         return salary
 
+    def to_dict(self):
+        """Convert the Vacancy object to a dictionary."""
+        return {
+            'title': self.title,
+            'url': self.url,
+            'salary': self.salary,
+            'description': self.description
+        }
+
     def __lt__(self, other):
-        """Compares two vacancies by salary."""
         return self._salary_value() < other._salary_value()
 
     def __le__(self, other):
-        """Compares two vacancies by salary."""
         return self._salary_value() <= other._salary_value()
 
     def __eq__(self, other):
-        """Compares two vacancies by salary."""
         return self._salary_value() == other._salary_value()
 
     def __ne__(self, other):
-        """Compares two vacancies by salary."""
         return self._salary_value() != other._salary_value()
 
     def __gt__(self, other):
-        """Compares two vacancies by salary."""
         return self._salary_value() > other._salary_value()
 
     def __ge__(self, other):
-        """Compares two vacancies by salary."""
         return self._salary_value() >= other._salary_value()
 
     def _salary_value(self) -> int:
-        """Extracts the salary value for comparison, handling ranges and missing data."""
         if 'не указана' in self.salary.lower():
             return 0
-        # Assuming salary is given in a format like "100 000-150 000 руб."
         salary_parts = self.salary.replace(" ", "").split('-')
         try:
             return int(salary_parts[0])
         except (ValueError, IndexError):
-            return 0  # Fallback in case of unexpected format
+            return 0
+
+    def __hash__(self):
+        return hash((self.title, self.url, self.salary, self.description))
 
     def __repr__(self):
         return f"Vacancy({self.title!r}, {self.url!r}, {self.salary!r}, {self.description!r})"
