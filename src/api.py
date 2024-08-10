@@ -1,5 +1,7 @@
 from abc import abstractmethod
+
 import requests
+
 
 class Parser:
     @abstractmethod
@@ -12,15 +14,18 @@ class Parser:
         """Fetch vacancies based on a search keyword."""
         pass
 
+
 class HeadHunterAPI(Parser):
     """
     Class for access to HeadHunter API
     """
+
     def __init__(self):
         self._url = 'https://api.hh.ru/vacancies'
         self._headers = {'User-Agent': 'HH-User-Agent'}
         self._params = {'text': '', 'page': 0, 'per_page': 100}
         self._vacancies = []
+
     def _connect(self):
         """Establish connection to the hh.ru API by sending a basic request."""
         response = requests.get(self._url, headers=self._headers)

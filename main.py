@@ -2,6 +2,7 @@ from src.api import HeadHunterAPI
 from src.vacancites_utils import Vacancy
 from src.file_utils import JSONSaver
 
+
 def filter_vacancies(vacancies, filter_words):
     """Filter vacancies based on keywords in the title or description."""
     return [
@@ -10,12 +11,13 @@ def filter_vacancies(vacancies, filter_words):
                for word in filter_words)
     ]
 
+
 def get_vacancies_by_salary(vacancies, salary_range):
     """Filter vacancies within a given salary range."""
     min_salary, max_salary = map(int, salary_range.split('-'))
     return [
         vacancy for vacancy in vacancies
-        if vacancy._salary_value() >= min_salary and vacancy._salary_value() <= max_salary
+        if min_salary <= vacancy._salary_value() <= max_salary
     ]
 
 
@@ -33,6 +35,7 @@ def print_vacancies(vacancies):
     """Print the list of vacancies."""
     for vacancy in vacancies:
         print(f"{vacancy.title}: {vacancy.salary} ({vacancy.url})")
+
 
 def user_interaction():
     hh_api = HeadHunterAPI()
@@ -75,6 +78,7 @@ def user_interaction():
         else:
             print("Вакансия с таким URL не найдена.")
 
+
 # Helper function to format salary data
 def _format_salary(salary_data):
     if not salary_data:
@@ -84,6 +88,7 @@ def _format_salary(salary_data):
     currency = salary_data.get('currency', 'RUR')
     salary_str = f"{salary_from or ''}-{salary_to or ''} {currency}".strip('-')
     return salary_str
+
 
 if __name__ == "__main__":
     user_interaction()

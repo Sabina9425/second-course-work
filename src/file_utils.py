@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import json
+
 from src.vacancites_utils import Vacancy
 
 
@@ -20,6 +21,7 @@ class VacancyFileManager(ABC):
     def delete_vacancy(self, vacancy: Vacancy):
         """Delete a vacancy from the file."""
         pass
+
 
 class JSONSaver(VacancyFileManager):
 
@@ -67,7 +69,8 @@ class JSONSaver(VacancyFileManager):
         with open(self._filename, 'w', encoding='utf-8') as file:
             json.dump(data, file, ensure_ascii=False, indent=4)
 
-    def _in_salary_range(self, salary: str, salary_range: tuple):
+    @staticmethod
+    def _in_salary_range(salary: str, salary_range: tuple):
         """Check if the salary falls within the specified range."""
         if 'не указана' in salary.lower():
             return False

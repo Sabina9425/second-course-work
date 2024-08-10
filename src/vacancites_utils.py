@@ -7,7 +7,8 @@ class Vacancy:
         self.salary = self._validate_salary(salary)
         self.description = description
 
-    def _validate_salary(self, salary: str) -> str:
+    @staticmethod
+    def _validate_salary(salary: str) -> str:
         """Validates the salary data."""
         if not salary or salary.lower() in ['не указана', '']:
             return 'Зарплата не указана'
