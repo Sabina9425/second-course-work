@@ -36,7 +36,7 @@ class HeadHunterAPI(Parser):
 
         self._connect()
 
-        while self._params['page'] < 20:  # Limit to 20 pages for this example
+        while self._params['page'] < 1:  # Limit to 20 pages for this example
             response = requests.get(self._url, headers=self._headers, params=self._params)
             if response.status_code == 200:
                 data = response.json()
