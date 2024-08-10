@@ -43,11 +43,11 @@ class JSONSaver(VacancyFileManager):
     def get_vacancies(self, criteria: dict):
         """Get vacancies from the JSON file based on criteria."""
         data = self._load_file()
-        vacancies = data.get('items', [])
+        vacancies = Vacancy.cast_to_object_list(data.get('items', []))
         result = [
             vacancy for vacancy in vacancies
-            if (criteria.get('title') in vacancy.get('title', '')) and
-               (self._in_salary_range(vacancy.get('salary', ''), criteria.get('salary_range')))
+            if (str(criteria.get('title', '')).lower() in vacancy.title.lower()) and
+               (self._in_salary_range(vacancy.salary_value(), criteria.get('salary_range')))
         ]
         return result
 
@@ -70,13 +70,6 @@ class JSONSaver(VacancyFileManager):
             json.dump(data, file, ensure_ascii=False, indent=4)
 
     @staticmethod
-    def _in_salary_range(salary: str, salary_range: tuple):
-        """Check if the salary falls within the specified range."""
-        if 'не указана' in salary.lower():
-            return False
-        salary_parts = salary.replace(" ", "").split('-')
-        try:
-            salary_value = int(salary_parts[0])
-            return salary_range[0] <= salary_value <= salary_range[1]
-        except (ValueError, IndexError):
-            return False
+    def _in_salary_range(salary_value: int, salary_range: tuple):
+        min_salary, max_salary = map(int, salary_range.split('-'))
+        return min_salary <= salary_value <= max_salary
